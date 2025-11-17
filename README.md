@@ -26,7 +26,16 @@ Se instala como dependencia de desarrollo (-D o --save-dev), ya que solo se usa 
 
 🔹 npm i -D nodemon
 
-# 4. Instalación de Cors
+# 4. Instalación de Dotenv
+
+npm i dotenv
+
+# 5. Instalación de Cors
 Middleware que habilita o restringe solicitudes entre distintos orígenes (Cross-Origin Resource Sharing). Esencial para que tu frontend pueda comunicarse con tu backend.
 
 🔹npm i cors
+
+# 6. Instalación de Firebase
+
+npm i firebase
+
