@@ -1,0 +1,1 @@
+import * as model from '../models/users.model.js';      // Importo todas las funciones del model

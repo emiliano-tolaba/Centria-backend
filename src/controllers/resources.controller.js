@@ -1,5 +1,8 @@
 import * as service from "../services/resources.service.js";    // Importo todas las funciones del service
 
+
+/// ************************************************ RUTAS GET ************************************************
+
 export const getAllResources = async (req, res) =>
 {
     try {
@@ -7,31 +10,17 @@ export const getAllResources = async (req, res) =>
         res.json(resources);
     } catch (err) {
         console.error("Controller error:", err);
-        res.status(500).json({ error: "Error al obtener recursos" });
+        res.status(500).json({ error: "500. Error al obtener Recursos" });
     }
 }
 
-/*
-export const getProductById = (req, res) => {
-    
-    const { id } = req.params;    // desestructuración de objetos.Extraemos el parámetro dinámico 'id' desde la URL
-    const product = service.getProductById(id);   // Busca un producto por su id en la URL.
-
-    if(!product)
-    {
-        return res.status(404).json({error: "Producto no encontrado"});    // Si no lo encuentra, responde con un error 404.
-    }
-    
-    res.json(product);  // Si existe, lo devolvemos
-};*/
-
 export const searchResource = async (req, res) => 
 {
-    const {title} = req.query;   // req.query Se usa para acceder a valores en la URL después del signo de interrogación (?)   
+    const { title } = req.query;   // req.query Se usa para acceder a valores en la URL después del signo de interrogación (?)   
     
     if (!title || typeof title !== 'string' || title.trim() === '')
     {
-        return res.status(400).json({ error: "Falta el parámetro 'title' en la query" });
+        return res.status(400).json({ error: "400. Falta el parámetro 'title' en la query" });
     }
     
     try
@@ -40,7 +29,7 @@ export const searchResource = async (req, res) =>
         
         if(filteredResources.length === 0)
         {
-            return res.status(404).json({error: 'Recurso no encontrado'});
+            return res.status(404).json({error: '404. Recurso no encontrado'});
         }
         
         return res.json(filteredResources);
@@ -49,34 +38,56 @@ export const searchResource = async (req, res) =>
     catch(error)
     {
         console.error('searchResource error:', error);
-        return res.status(500).json({error: 'Error interno al buscar recursos'});
+        return res.status(500).json({error: '500. Error interno al buscar Recursos'});
     }
 
 };
 
+export const getResourceById = async (req, res) => {
+    
+    const { id } = req.params;    // desestructuración de objetos.Extraemos el parámetro dinámico 'id' desde la URL
+    const resource = await service.getResourceById(id);   // Busca un Recurso por su id en la URL.
 
-/*
+    if(!resource)
+    {
+        return res.status(404).json({error: "404. Recurso no encontrado"});    // Si no lo encuentra, responde con un error 404.
+    }
+    
+    res.json(resource);  // Si existe, lo devolvemos
+};
+
+
+
+
 
 
 /// ************************************************ RUTAS POST ************************************************
 
 
-export const createNewProduct = (req, res) =>
+export const createNewResource = async (req, res) =>
 {
-    const {name, price, cantidad} = req.body;   // req.body contiene los datos enviados por el cliente.
-
-    const newProduct = service.createNewProduct(name, price, cantidad);     // guardamos el nuevo producto que retornó la función para mostrarlo
-
-    if(newProduct.error)
+    const {valid, errors} = service.validateResourceData(req.body);
+    
+    if(!valid)
     {
-        return res.status(400).json({ error: newProduct.error });
+        return res.status(400).json({error: errors});  // Devuelvo un error 400 con los mensajes de error
     }
-
-    res.status(201).json(   // código 201. Creado con exito
+    
+    const {title, type, content} = req.body;   // req.body contiene los datos enviados por el cliente.
+    
+    try
     {
-        mensaje: 'Producto creado con exito',
-        producto: newProduct,
-    });
+        const newResource = await service.createNewResource({title, type, content});     // guardamos el nuevo recurso que retornó la función para mostrarlo
+
+        res.status(201).json({codigo: '201. Recurso creado con exito', recurso: newResource});    // Además muestra el recurso creado
+    }
+    catch(error)
+    {
+        console.error('createNewResource error:', error);   // Muestra el error en consola para depuración
+        
+        return res.status(500).json({error: '500. Error interno al crear un nuevo Recurso'});
+    }
+    
 }; 
 
 
@@ -84,27 +95,40 @@ export const createNewProduct = (req, res) =>
 /// ************************************************ RUTAS PUT ************************************************
 
 
-export const updateProduct = (req, res) =>  // Ruta para modificar el producto
+export const updateResource = async (req, res) =>  // Ruta para modificar el Recurso
 {
-    const productId = parseInt(req.params.id, 10);  // Obtengo el id del producto a modificar y lo convierto a entero
-    const { name, price, cantidad } = req.body;     // Extraemos los nuevos datos del body de la petición
-    const updatedProduct = service.updateProduct(productId, name, price, cantidad);
-
-    if(updatedProduct === -1) // Si no se encuentra, devolvemos error 404
+    const {id} = req.params;               // Obtengo el id del Recurso a modificar
+    const resourceData = req.body;   // req.body contiene los datos enviados por el cliente.
+    const {valid, errors} = service.validateResourceData(resourceData);
+    
+    if(!id) // Valida que haya un id valido, o que no sea undefined o null
     {
-        return res.status(404).json({error: "Producto no encontrado"});
+        return res.status(400).json({error: '400. Se requiere el id del Recurso en la ruta'});
     }
 
-    if(updatedProduct.error)
+    if(!valid)
     {
-        return res.status(400).json({ error: updatedProduct.error });
+        return res.status(400).json({error: errors});  // Devuelvo un error 404 con los mensajes de error
+    }
+    
+    try
+    {
+        const updatedResource = await service.updateResource(id, resourceData);
+
+        if(!updatedResource) // Si no existe el Recurso, devuelve 404
+        {
+            return res.status(404).json({error: '404. Recurso No encontrado'});
+        }
+
+        return res.status(200).json({mensaje: 'Recurso modificado exitosamente', recursoModificado: updatedResource}) // Si se actualizó correctamente, devuelve el Recurso actualizado
+    }
+    catch(error)   // manejo de errores inesperados
+    {
+        console.error('updateResource error: ', error);
+
+        return res.status(500).json({error: '500. Error interno al actualizar el Recurso'});
     }
 
-    res.status(200).json(
-    {
-        mensaje: 'Producto modificado',
-        productoModificado: updatedProduct,
-    });           // devuelve el producto actualizado
 };
 
 
@@ -112,21 +136,24 @@ export const updateProduct = (req, res) =>  // Ruta para modificar el producto
 /// ************************************************ RUTAS DELETE ************************************************
 
 
-export const deleteProduct = (req, res) =>   // Ruta para eliminar el producto
+export const deleteResource = async (req, res) =>   // Ruta para eliminar el Recurso
 {
-    const productId = parseInt(req.params.id, 10);  // extraemos el indice a buscar desde la ruta
-    const deletedProduct = service.deleteProduct(productId);
+    const {id} = req.params;
 
-    if(deletedProduct == -1)
+    try
     {
-        return res.status(404).json({error: 'Producto no encontrado'});
+        const deletedResource = await service.deleteResource(id);
+
+        if(!deletedResource)
+        {
+            return res.status(404).json({error: '404. Recurso no encontrado'});
+        }
+
+        return res.status(200).json({mensaje: 'Recurso eliminado exitosamente', recursoEliminado: deletedResource});
     }
-
-    res.status(200).json(
+    catch(error)    // para errores inesperados durante ejecución
     {
-        mensaje: 'Producto eliminado',
-        productoEliminado : deletedProduct,
-    });    // 204. Es el codigo de estado para la eliminación exitosa, pero como no muestra mensaje, a fines didacticos usé el 200
+        console.error('deleteResource error:', error);
+        return res.status(500).json({error: 'Error interno al eliminar el Recurso'});
+    }
 };
-
-*/
