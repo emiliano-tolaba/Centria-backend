@@ -14,9 +14,8 @@ import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, setDoc, updateDoc 
 // setDoc: para crear o sobrescribir un documento con ID específico
 // updateDoc: para actualizar campos específicos de un documento
 
-// Referencia a la colección "resources" en Firestore
 
-const resourcesCollection = collection(db, "resources");
+const resourcesCollection = collection(db, "resources");        // Referencia a la colección "resources" en Firestore
 
 // Obtiene todos los recursos desde Firestore.
 export const getAllResources = async () =>
@@ -122,7 +121,7 @@ export const updateResource = async (id, resourceData) =>
         // Busco un documento cuyo campo 'id' coincida (uso el operador "=="" para cubrir número vs string (por ejemplo "3" vs 3))
 
         const found = allSnapshot.docs.find(d => { // cada elemento d representa un documento de Firestore.
-                const data = d.data();               // d.data() devuelve un objeto con los datos del documento ({id: 3, name: "Mouse", price: 1000 })
+                const data = d.data();               // d.data() devuelve un objeto con los datos del documento
                 // Comparo tanto string como número
                 return data?.id == id || data?.id == Number(id); // Usa encadenamiento opcional (?.) para evitar errores si data es undefined o null.
                                                                 // Si data existe, devuelve su propiedad id. Si data NO existe, devuelve undefined sin lanzar error

@@ -5,7 +5,7 @@ export const getAllResources = () =>
     return model.getAllResources();     
 }
 
-export const searchResource = async (title) =>
+export const searchResourceByTitle = async (title) =>
 {
     const resources = await model.getAllResources();
 

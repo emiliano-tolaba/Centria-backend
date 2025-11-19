@@ -14,7 +14,7 @@ export const getAllResources = async (req, res) =>
     }
 }
 
-export const searchResource = async (req, res) => 
+export const searchResourceByTitle = async (req, res) => 
 {
     const { title } = req.query;   // req.query Se usa para acceder a valores en la URL después del signo de interrogación (?)   
     
@@ -25,7 +25,7 @@ export const searchResource = async (req, res) =>
     
     try
     {
-        const filteredResources = await service.searchResource(title);     
+        const filteredResources = await service.searchResourceByTitle(title);     
         
         if(filteredResources.length === 0)
         {
@@ -37,7 +37,7 @@ export const searchResource = async (req, res) =>
     }
     catch(error)
     {
-        console.error('searchResource error:', error);
+        console.error('searchResourceByTitle error:', error);
         return res.status(500).json({error: '500. Error interno al buscar Recursos'});
     }
 
