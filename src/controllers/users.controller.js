@@ -82,11 +82,11 @@ export const createNewUser = async (req, res) =>
         return res.status(400).json({error: errors});  // Si la validación falla, devolvemos un error 400 con los mensajes correspondientes
     }
     
-    const {name, email} = req.body;       // Extraemos los campos necesarios del body
+    const {name, email, password} = req.body;       // Extraemos los campos necesarios del body
     
     try
     {
-        const newUser = await service.createNewUser({name, email});     // Llamamos al servicio para crear el nuevo usuario en Firestore
+        const newUser = await service.createNewUser({name, email, password});     // Llamamos al servicio para crear el nuevo usuario en Firestore
 
         res.status(201).json({codigo: '201. Usuario creado con exito', user: newUser});    // Si todo sale bien, devolvemos un 201 con el usuario creado
     }
@@ -107,8 +107,8 @@ export const createNewUser = async (req, res) =>
 export const updateUser = async (req, res) =>  
 {
     const {id} = req.params;                // Extraemos el id del usuario desde los parámetros de la ruta (ej: /users/:id)
-    const userData = req.body;              // Extraemos los datos enviados por el cliente en el body de la request
-    const {valid, errors} = service.validateUserData(userData);     // Validamos los datos recibidos usando la función de servicio
+    const newData = req.body;              // Extraemos los datos enviados por el cliente en el body de la request
+    const {valid, errors} = service.validateUserData(newData);     // Validamos los datos recibidos usando la función de servicio
     
     
     if(!id) // Valida que haya un id valido, o que no sea undefined o null
@@ -123,7 +123,7 @@ export const updateUser = async (req, res) =>
     
     try
     {
-        const updatedUser = await service.updateUser(id, userData); // Llamamos al servicio para actualizar el usuario en la base de datos
+        const updatedUser = await service.updateUser(id, newData); // Llamamos al servicio para actualizar el usuario en la base de datos
 
         if(!updatedUser) // Si el servicio devuelve false/null, significa que el usuario no existe → devolvemos 404
         {

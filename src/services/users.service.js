@@ -1,5 +1,6 @@
 import * as model from '../models/users.model.js';      // Importo todas las funciones del model
 
+
 // Service: obtiene todos los usuarios
 export const getAllUsers = async () =>
 {
@@ -38,14 +39,22 @@ export const validateUserData = (data) =>
         return { valid: false, errors: ["No se proporcionó datos del Usuario"] }
     }
 
+    // Validación del nombre
     if (!data.name || typeof data.name !== 'string' || data.name.trim() === '')
     {
         errors.push("No se proporcionó datos del nombre"); // Agrega un mensaje de error si el name está vacio        
     }
 
+    // Validación del email
     if (!data.email || typeof data.email !== 'string' || data.email.trim() === '')
     {
         errors.push("No se proporcionó datos del email"); // Agrega un mensaje de error si el email está vacio        
+    }
+
+    // Validación de la contraseña
+    if(!data.password || typeof data.password !== 'string' || data.password.trim() === '')
+    {
+        errors.push("No se proporcionó datos de la contraseña"); // Agrega un mensaje de error si la contraseña está vacia        
     }
 
     // Devuelve un objeto con:
@@ -62,9 +71,9 @@ export const createNewUser = async (data) =>
 
 
 // Service: modifica un usuario existente
-export const updateUser = async (id, userData) =>
+export const updateUser = async (id, newData) =>
 {
-    return await model.updateUser(id, userData);        // delega la llamada al model. El controlador recibirá el Usuario actualizado.
+    return await model.updateUser(id, newData);        // delega la llamada al model. El controlador recibirá el Usuario actualizado.
 }
 
 

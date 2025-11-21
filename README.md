@@ -39,3 +39,10 @@ Middleware que habilita o restringe solicitudes entre distintos orígenes (Cross
 
 npm i firebase
 
+# 7. Instalación de JWT
+
+npm i jsonwebtoken
+
+# 8. Instalación de bcrypt
+
+npm i bcrypt

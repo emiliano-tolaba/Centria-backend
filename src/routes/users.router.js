@@ -1,9 +1,11 @@
 import { Router } from 'express';                                   // Desestructuramos Router de express
 import * as controller from '../controllers/users.controller.js';   // Importamos las funciones del controlador
+import { auth } from '../middlewares/auth.middleware.js';
 
 
 const router = Router();                                            // Creamos una instacia de Router
 
+router.use(auth);                                                   // Utilizo el middleware de autenticación para proteger TODAS las rutas
 
 
 /// ************************************************ RUTAS GET ************************************************
@@ -11,16 +13,16 @@ const router = Router();                                            // Creamos u
 
 
 // Lista completa de Usuarios
-router.get('/users', controller.getAllUsers);
+router.get('/', controller.getAllUsers);
 
 
 // Búsqueda por name usando query params
 // http://localhost:3000/api/users/search?name=nombreEjemplo
-router.get('/users/search', controller.searchUserByName);
+router.get('/search', controller.searchUserByName);
 
 
 // Búsqueda por ID usando parámetros de ruta
-router.get('/users/:id', controller.getUserById);
+router.get('/:id', controller.getUserById);
 
 
 
@@ -29,7 +31,7 @@ router.get('/users/:id', controller.getUserById);
 
 
 // Crear un nuevo Usuario
-router.post('/users', controller.createNewUser);
+router.post('/', controller.createNewUser);
 
 
 
@@ -38,7 +40,7 @@ router.post('/users', controller.createNewUser);
 
 
 // Modifica un Usuario
-router.put('/users/:id', controller.updateUser);
+router.put('/:id', controller.updateUser);
 
 
 
@@ -47,7 +49,7 @@ router.put('/users/:id', controller.updateUser);
 
 
 // Elimina un Usuario
-router.delete('/users/:id', controller.deleteUser);
+router.delete('/:id', controller.deleteUser);
 
 
 

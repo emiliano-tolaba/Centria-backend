@@ -3,9 +3,9 @@
 import 'dotenv/config';         // Importamos 'dotenv/config' para poder usar variables de entorno definidas en un archivo .env
 import express from 'express';  // Importamos el módulo 'express' que nos permite crear un servidor HTTP de forma sencilla
 import cors from 'cors';        // Importamos 'cors' para permitir solicitudes desde distintons origenes (dominios diferentes)
-import usersRouter from './src/routes/users.router.js'
-import resourcesRouter from './src/routes/resources.router.js';     
-
+import usersRouter from './src/routes/users.router.js'              // Importamos el router que maneja todas las rutas relacionadas con Users
+import resourcesRouter from './src/routes/resources.router.js';     // Importamos el router que maneja las rutas relacionadas con Recursos
+import authRouter from './src/routes/auth.router.js';               // Importamos el router que maneja las rutas de Autenticación
 
 
 /// ************************************************ CONFIGURACIÓN INICIAL DEL SERVIDOR ************************************************
@@ -39,6 +39,7 @@ app.use((req, res, next) =>
     console.log("=> Cabeceras:", req.headers);          // Infor enviada por el cliente
     console.log("=> content-type:", req.headers['content-type'] || 'No especificado');
     console.log("====================================");
+    
     next(); // Continua al siguiente middleware o ruta
 });
 
@@ -47,9 +48,9 @@ app.use((req, res, next) =>
 /// ************************************************ RUTAS PRINCIPALES ************************************************
 
 
-app.use("/api", usersRouter);
-app.use("/api", resourcesRouter);   // Usamos el modulo resources.router, agregandole el prefijo "api"
-
+app.use('/api/auth', authRouter);
+app.use("/api/resources", resourcesRouter);
+app.use("/api/users", usersRouter);
 
 
 

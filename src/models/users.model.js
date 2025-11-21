@@ -1,6 +1,6 @@
 import { db } from './data.js';         // Importamos la conexión a Firestore que configuramos en data.js
-import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, setDoc, updateDoc, serverTimestamp  } from "firebase/firestore";    // Importamos las funciones necesarias del SDK de Firestore para trabajar con colecciones y documentos
-
+import { collection, getDocs, doc, getDoc, addDoc, deleteDoc, setDoc, updateDoc, serverTimestamp, query, where } from "firebase/firestore";    // Importamos las funciones necesarias del SDK de Firestore para trabajar con colecciones y documentos
+import bcrypt from "bcrypt";            // Importamos bcrypt para encriptar contraseñas
 
 // Creamos una referencia a la colección "users" dentro de la base de datos.
 const usersCollection = collection(db, "users");    // Esta referencia se reutiliza en todas las operaciones de lectura/escritura.
@@ -36,6 +36,20 @@ export const getAllUsers = async () =>
 }
 
 
+// Busca un usuario por email
+export const findUserByEmail = async (email) =>
+{
+    const q = query(usersCollection, where("email", "==", email));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) return null;
+
+    const doc = snapshot.docs[0];
+    
+    return { id: doc.id, ...doc.data() };
+};
+
+
 // Obtiene un solo Usuario desde Firestore, para evitar traer toda la lista.
 export const getUserById = async (id) => {
     try
@@ -69,21 +83,32 @@ export const getUserById = async (id) => {
 export const createNewUser = async (data) => { // "data" contiene los campos del Usuario (name, email) a guardar
     try
     {
+        // Encriptamos la contraseña antes de guardarla
+        const hashedPassword = await bcrypt.hash(data.password, 10); // 10 = salt rounds
+
+        // Creamos el objeto a guardar en Firestore SIN usar spread
+        const userData = {
+            name: data.name,                        // Nombre del usuario
+            email: data.email,                      // Email del usuario
+            password: hashedPassword,               // Guardamos el hash en lugar de la contraseña original
+            registrationDate: serverTimestamp()     // Fecha/hora del servidor
+        };
+
         // INSERCIÓN EN FIRESTORE
         // Firestore genera automáticamente un ID único para este documento
-        const docReference = await addDoc(usersCollection, {...data, registrationDate: serverTimestamp()}); // Usamos serverTimestamp() para guardar la fecha/hora del servidor
+        const docReference = await addDoc(usersCollection, userData);   
 
         // Leemos el documento recién creado para obtener los datos tal como quedaron en Firestore
         const snapshot = await getDoc(docReference);
         const savedData = snapshot.data();
 
-        // Construimos el objeto de respuesta para el controlador
-        return {
+        // Construimos el objeto de respuesta (no devolvemos la contraseña)
+        return {    
             id: docReference.id,
             name: savedData.name || "Sin nombre",
             email: savedData.email || "Sin email ingresado",
-            registrationDate: savedData.registrationDate?.toDate() || null  // Convertimos Timestamp a Date para mostrarlo con un formato fecha
-        }; 
+            registrationDate: savedData.registrationDate?.toDate() || null
+        };
         
     }   
     catch (error)
@@ -94,14 +119,14 @@ export const createNewUser = async (data) => { // "data" contiene los campos del
     }
 }
 
+
 // Función asincrónica que modifica un Usuario de Firestore por su ID
-export const updateUser = async (id, userData) => 
+export const updateUser = async (id, newData) => 
 {
     try
     {
-        // Referencia tentativa por doc id
-        const userRef = doc(usersCollection, id);   //  Obtengo la referencia al documento
-        const snapshot = await getDoc(userRef);     // Obtenemos el snapshot actual del documento para verificar si existe
+        const userReference = doc(usersCollection, id);   //  Obtengo la referencia al documento
+        const snapshot = await getDoc(userReference);     // Obtenemos el snapshot actual del documento para verificar si existe
 
         if (!snapshot.exists())                     // Si no existe, devolvemos false para que el controller mande 404
         {
@@ -109,10 +134,16 @@ export const updateUser = async (id, userData) =>
             return false;
         }
 
-        await updateDoc(userRef, userData);        // Actualizamos únicamente los campos provistos en userData (updateDoc no reemplaza todo el documento)
+        // Si viene una nueva contraseña, la encriptamos
+        if(newData.password)
+        {
+            newData.password = await bcrypt.hash(newData.password, 10);
+        }
+
+        await updateDoc(userReference, newData);        // Actualizamos únicamente los campos provistos en newData (updateDoc no reemplaza todo el documento)
         
         // Volvemos a leer el documento actualizado para devolverlo con los nuevos valores
-        const updatedSnapshot = await getDoc(userRef);      // getDoc obtiene el snapshot (estado) del documento referenciado.
+        const updatedSnapshot = await getDoc(userReference);      // getDoc obtiene el snapshot (estado) del documento referenciado.
         const updatedData = updatedSnapshot.data();         // Del nuevo snapshot extraemos la data
         
         return {
@@ -130,6 +161,7 @@ export const updateUser = async (id, userData) =>
         return null;                                    // Si ocurre un error inesperado, devolvemos null para que el controller responda con 500
     }
 }
+
 
 // Función asincrónica que elimina un Usuario de Firestore por su ID
 export const deleteUser = async (id) =>
