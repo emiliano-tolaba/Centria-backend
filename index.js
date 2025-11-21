@@ -6,6 +6,9 @@ import cors from 'cors';        // Importamos 'cors' para permitir solicitudes d
 import usersRouter from './src/routes/users.router.js'              // Importamos el router que maneja todas las rutas relacionadas con Users
 import resourcesRouter from './src/routes/resources.router.js';     // Importamos el router que maneja las rutas relacionadas con Recursos
 import authRouter from './src/routes/auth.router.js';               // Importamos el router que maneja las rutas de Autenticación
+import { logger } from './src/middlewares/logger.middleware.js';
+import { notFound } from './src/middlewares/notfound.middleware.js';
+import { errorHandler } from './src/middlewares/errorHandler.middleware.js';
 
 
 /// ************************************************ CONFIGURACIÓN INICIAL DEL SERVIDOR ************************************************
@@ -25,24 +28,9 @@ app.use(express.json());            // Permite a Express interpretar automática
 
 
 
-/// ************************************************ MIDDLEWARE DE REGISTRO GENERAL ************************************************
-// Se ejecuta *antes* de cualquier ruta
+// Middleware de registro general: se ejecuta ANTES de cualquier ruta
 
-
-app.use((req, res, next) =>
-{
-    const timestamp = new Date().toISOString(); // Fecha y hora actual en formato ISO - legible
-    console.log("\n ========= NUEVA PETICIÓN ========="); 
-    console.log("=> Fecha:", timestamp);
-    console.log("=> Método:", req.method);  // GET, POST, PUT, DELETE, etc.
-    console.log("=> URL original:", req.originalUrl); // La URL completa pedida
-    console.log("=> Cabeceras:", req.headers);          // Infor enviada por el cliente
-    console.log("=> content-type:", req.headers['content-type'] || 'No especificado');
-    console.log("====================================");
-    
-    next(); // Continua al siguiente middleware o ruta
-});
-
+app.use(logger);
 
 
 /// ************************************************ RUTAS PRINCIPALES ************************************************
@@ -66,46 +54,14 @@ app.get('/', (req, res)=>
 
 
 
-/// ************************************************ MIDDLEWARE 404 NOT FOUND ************************************************
-// Este middleware se ejecuta si ninguna de las rutas anteriores fue encontrada
-// Maneja errores de tipo "No encontrado" (404) para cualquier método (GET, POST, etc.)
+// Middleware 404 not found
+
+app.use(notFound);
 
 
-app.use((req, res, next) =>
-{
-    res.status(404).json(
-    {
-        error: '404. Ruta no encontrada',       // mensaje de error genérico
-        ruta: req.originalUrl,                  // Muestra al ruta que el cliente intentó acceder, originalURL es una propiedad del req
-    });
-});
+// Middleware errorHandler (maneja errores globales)
 
-
-
-/// ************************************************ MIDDLEWARE - MANEJADOR GLOBAL DE ERRORES ************************************************
-// Captura y maneja errores internos del servidor. Evita que el servidor se caiga ante un error inesperado y devuelve una respuesta JSON
-
-
-app.use((err, req, res, next) =>
-{
-    console.log("Se capturó un error en el middleware global: ");
-    console.log("Mensaje: ", err.message);
-    console.log("Stack: ", err.stack);      // En desarrollo muestra el stack trace completo, no recomendado en producción
-
-    // Respondemos con código 500 (Internal Server Error) y detalles del error
-    // En desarrollo mostramos detalles, en producción no
-    const response = {
-        error: `<<< INT >>> Error interno del servidor <<< INT >>>`,
-        mensaje: err.mensaje,
-    };
-
-    if(process.env.NODE_ENV !== 'production')
-    {
-        response.stack = err.stack;
-    }
-
-    res.status(500).json(response);
-});
+app.use(errorHandler);
 
 
 
