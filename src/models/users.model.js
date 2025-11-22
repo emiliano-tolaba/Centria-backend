@@ -36,17 +36,21 @@ export const getAllUsers = async () =>
 }
 
 
-// Busca un usuario por email
+// Busca un usuario en la colección "users" a partir de su email
 export const findUserByEmail = async (email) =>
 {
-    const q = query(usersCollection, where("email", "==", email));
-    const snapshot = await getDocs(q);
+    const q = query(usersCollection, where("email", "==", email));  // Construye una consulta sobre la colección "users"
+    const snapshot = await getDocs(q);      // Filtra los documentos donde el campo "email" sea igual al valor recibido
+    // Ejecuta la consulta y obtiene un "snapshot" con los resultados
 
-    if (snapshot.empty) return null;
+    if (snapshot.empty) return null;        // Si la consulta no devolvió ningún documento, retorna null
 
-    const doc = snapshot.docs[0];
+    const doc = snapshot.docs[0];           // Toma el primer documento encontrado (en este caso, debería ser único)
     
-    return { id: doc.id, ...doc.data() };
+    // Devuelve un objeto que combina:
+    // - el id del documento (doc.id)
+    // - todos los campos del documento (doc.data())
+    return { id: doc.id, ...doc.data() };       
 };
 
 

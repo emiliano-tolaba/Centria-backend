@@ -88,7 +88,7 @@ export const createNewResource = async (data) => { // "data" contiene los campos
             title: data.title || "Sin título",   // si no viene, usa valor por defecto
             type: data.type || "Desconocido",
             content: data.content || "Sin contenido"
-        };  // Retorno el nuevo Recurso con su ID y los datos (incluyendo createdAt)
+        };
         
     } 
     catch (error)

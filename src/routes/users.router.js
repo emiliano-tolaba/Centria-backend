@@ -1,6 +1,7 @@
 import { Router } from 'express';                                   // Desestructuramos Router de express
 import * as controller from '../controllers/users.controller.js';   // Importamos las funciones del controlador
 import { auth } from '../middlewares/auth.middleware.js';
+import todosRouter from "./todos.router.js";
 
 
 const router = Router();                                            // Creamos una instacia de Router
@@ -54,6 +55,12 @@ router.delete('/:id', controller.deleteUser);
 
 
 // ****************************************************************************************************************
+
+// Subrutas de todos (tareas privadas de cada usuario)
+
+router.use('/:userId/todos', todosRouter);      // Monta el router de todos dentro de users
+
+
 
 
 export default router;
