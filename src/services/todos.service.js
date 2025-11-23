@@ -14,7 +14,7 @@ export const searchTodosByTask = async (userId, task) =>
 {
     const todos = await model.getAllTodos(userId);    // Primero obtenemos todos los Todos desde el modelo.
 
-    // Filtramos aquellos cuyo campo "task" sea exactamente igual al texto recibido.
+    // Filtramos aquellos cuyo campo "task" contenga el texto recibido.
     // Usamos toLowerCase() para hacer la búsqueda case-insensitive.
     return todos.filter((todo) =>
     {

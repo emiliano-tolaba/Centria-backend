@@ -10,7 +10,13 @@ export const getAllTodos = async (req, res) =>
 {
     try
     {
-        const { userId } = req.params;
+        const { userId } = req.params;      // Extraemos userId de la ruta (/users/:userId/todos)
+
+        if(req.user.id !== userId)       // Validación de autorización: el userId de la ruta debe coincidir con el del token
+        {
+            return res.status(403).json({error: '403. No tenés permiso para acceder a estos datos'});
+        }
+
         const todos = await service.getAllTodos(userId);      // Llamamos al servicio que encapsula la lógica de acceso a datos.
         
         return res.status(200).json(todos); // devolvemos el array de tareas
@@ -24,12 +30,17 @@ export const getAllTodos = async (req, res) =>
 }
 
 
-// Controller: busca Todos filtrando por Category.
+// Controller: busca Todos por el campo Task.
 export const searchTodosByTask = async (req, res) => 
 {
-    const { userId } = req.params;
+    const { userId } = req.params;  // Extraemos userId (/users/:userId/todos)
     const { task } = req.query;   // req.query Se usa para acceder a valores en la URL después del signo de interrogación (?)   
     
+    if(req.user.id !== userId)       // Validación de autorización: el userId de la ruta debe coincidir con el del token
+    {
+        return res.status(403).json({error: '403. No tenés permiso para acceder a estos datos'});
+    }
+
     if (!task || typeof task !== 'string' || task.trim() === '')    // Validación: aseguramos que 'task' exista, sea string y no esté vacío.
     {
         return res.status(400).json({ error: "400. Falta el parámetro 'task' en la query" });
@@ -59,7 +70,13 @@ export const searchTodosByTask = async (req, res) =>
 // Controller: obtiene un todo específico por su ID.
 export const getTodoById = async (req, res) => {
     
-    const { userId, todoId } = req.params;                      // Extraemos el parámetro 'id' desde la URL usando desestructuración.
+    const { userId, todoId } = req.params;                      // Extraemos userId y todoId de la ruta (/users/:userId/todos/:todoId)
+
+    if(req.user.id !== userId)       // Validación de autorización: el userId de la ruta debe coincidir con el del token
+    {
+        return res.status(403).json({error: '403. No tenés permiso para acceder a estos datos'});
+    }
+
     const todo = await service.getTodoById(userId, todoId);     // Llamamos al servicio para buscar el todo por su ID.
 
     if(!todo)         // Si no existe el todo, devolvemos un 404.
@@ -79,14 +96,19 @@ export const getTodoById = async (req, res) => {
 // Controller: crea de un nuevo todo
 export const createNewTodo = async (req, res) =>
 {
+    const { userId } = req.params;              // Extraemos userId de la ruta (/users/:userId/todos/:todoId)
+
+    if(req.user.id !== userId)       // Validación de autorización: el userId de la ruta debe coincidir con el del token
+    {
+        return res.status(403).json({error: '403. No tenés permiso para acceder a estos datos'});
+    }
+
     const {valid, errors, normalizedData} = service.validateTodoData(req.body);     // Validamos los datos recibidos en el body de la request
     
     if(!valid)
     {
         return res.status(400).json({error: errors});  // Si la validación falla, devolvemos un error 400 con los mensajes correspondientes
     }
-    
-    const { userId } = req.params;              // Extraemos el userId de los parámetros de la URL
     
     try
     {
@@ -110,16 +132,21 @@ export const createNewTodo = async (req, res) =>
 // Controller encargado de manejar la actualización de un Todo existente
 export const updateTodo = async (req, res) =>  
 {
-    const {userId, todoId} = req.params;                // Extraemos el id del todo desde los parámetros de la ruta (ej: /todos/:id)
+    const {userId, todoId} = req.params;                // Extraemos userId y todoId de la ruta (/users/:userId/todos/:todoId)
     const newData = req.body;              // Extraemos los datos enviados por el cliente en el body de la request
-    const {valid, errors} = service.validateTodoData(newData);     // Validamos los datos recibidos usando la función de servicio
-    
-    
+
+    if(req.user.id !== userId)       // Validación de autorización: el userId de la ruta debe coincidir con el del token
+    {
+        return res.status(403).json({error: '403. No tenés permiso para acceder a estos datos'});
+    }
+
     if(!todoId) // Valida que haya un id valido, o que no sea undefined o null
     {
         return res.status(400).json({error: '400. Se requiere el id de la Tarea en la ruta'});  // Si no se envió un id válido en la ruta, devolvemos un error 400 (Bad Request)
     }
 
+    const {valid, errors} = service.validateTodoData(newData);     // Validamos los datos recibidos usando la función de servicio
+    
     if(!valid)  // valid = true si los datos son correctos, errors = array con mensajes de error
     {
         return res.status(400).json({error: errors});  // Devuelvo un error 400 con los mensajes de error
@@ -152,7 +179,12 @@ export const updateTodo = async (req, res) =>
 // Controller encargado de manejar la eliminación de un Todo existente
 export const deleteTodo = async (req, res) =>   // Ruta para eliminar el Todo
 {
-    const { userId, todoId} = req.params;        // Extraemos el id del todo desde los parámetros de la ruta 
+    const { userId, todoId} = req.params;        // Extraemos userId y todoId de la ruta (/users/:userId/todos/:todoId)
+    
+    if(req.user.id !== userId)       // Validación de autorización: el userId de la ruta debe coincidir con el del token
+    {
+        return res.status(403).json({error: '403. No tenés permiso para acceder a estos datos'});
+    }
 
     try
     {

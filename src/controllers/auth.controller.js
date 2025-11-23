@@ -23,7 +23,7 @@ export const login = async (req, res) =>
         const expiration = { expiresIn: "1h"};                  // Configuramos la expiración del token (1 hora)
         const token = jwt.sign(payload, process.env.JWT_secret, expiration);        // Firmamos el token con la clave secreta definida en las variables de entorno.
 
-        res.json({ token });        // Respondemos al cliente con el token generado.
+        res.json({"usuario": user.id, token });        // Respondemos al cliente con el token generado y el ID del usuario.
 
 
     }

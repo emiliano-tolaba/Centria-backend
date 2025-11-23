@@ -1,21 +1,23 @@
-import jwt from 'jsonwebtoken';   // Importamos la librería jsonwebtoken para trabajar con tokens JWT
+import jwt from "jsonwebtoken";
 
-// Middleware de autenticación: se ejecuta antes de las rutas protegidas
-export const auth = (req, res, next) =>
+export const authenticate = (req, res, next) =>
 {
-    // Extraemos el token del header "Authorization"
-    // El formato esperado es: "Bearer <token>"
-    // split(" ") separa en ["Bearer", "<token>"] y tomamos el segundo elemento (índice 1)
-    const token = req.headers["authorization"]?.split(" ")[1];   
-
-    if(!token) return res.sendStatus(401);      // Si no hay token en el header, respondemos con 401 (Unauthorized)
-
-    jwt.verify(token, process.env.JWT_secret, (error, decoded) =>   // "decoded" es el payload original que se firmó dentro del JWT.
+    const authHeader = req.headers.authorization;
+    if (!authHeader)
     {
-        if (error) return res.sendStatus(403);  // Si el token no es válido (firma incorrecta, expirado, etc.), devolvemos 403 (Forbidden)
+        return res.status(401).json({ error: "No se proporcionó token" });
+    }
 
-        req.user = decoded;     // Guardamos esos datos en la request para que los siguientes middlewares/controladores puedan usarlos
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded; // guardamos el payload del token
+        
         next();
-    });
-    
-}
+    }
+    catch (error)
+    {
+        return res.status(403).json({ error: "Token inválido o expirado" });
+    }
+};

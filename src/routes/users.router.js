@@ -1,12 +1,13 @@
 import { Router } from 'express';                                   // Desestructuramos Router de express
 import * as controller from '../controllers/users.controller.js';   // Importamos las funciones del controlador
-import { auth } from '../middlewares/auth.middleware.js';
+import { authenticate } from '../middlewares/auth.middleware.js';
 import todosRouter from "./todos.router.js";
+import habitsRouter from './habits.router.js';
 
 
 const router = Router();                                            // Creamos una instacia de Router
 
-router.use(auth);                                                   // Utilizo el middleware de autenticación para proteger TODAS las rutas
+router.use(authenticate);                                                   // Utilizo el middleware de autenticación para proteger TODAS las rutas
 
 
 /// ************************************************ RUTAS GET ************************************************
@@ -59,7 +60,7 @@ router.delete('/:id', controller.deleteUser);
 // Subrutas de todos (tareas privadas de cada usuario)
 
 router.use('/:userId/todos', todosRouter);      // Monta el router de todos dentro de users
-
+router.use('/:userId/habits', habitsRouter);    // Monta el router de habits dentro de users
 
 
 

@@ -1,5 +1,5 @@
 import { Router } from 'express';                                   // Desestructuramos Router de express
-import * as controller from '../controllers/todos.controller.js';   // Importamos las funciones del controlador
+import * as controller from '../controllers/habits.controller.js';   // Importamos las funciones del controlador
 import { authenticate } from '../middlewares/auth.middleware.js';
 
 const router = Router({ mergeParams: true });               // mergeParams: true → permite acceder a :userId desde este router
@@ -11,44 +11,44 @@ router.use(authenticate);                                                   // U
 // Método GET: se usa para leer información.
 
 
-// Lista completa de Todos
-router.get('/', controller.getAllTodos);
+// Lista completa de Habits
+router.get('/', controller.getAllHabits);
 
 
-// Búsqueda por el campo Task usando query params
-// http://localhost:3000/api/todos/search?task=
-router.get('/search', controller.searchTodosByTask);
+// Búsqueda por el campo Name usando query params
+// http://localhost:3000/api/:userId/habits/search?name=
+router.get('/search', controller.searchHabitsByName);
 
 
 // Búsqueda por ID usando parámetros de ruta
-router.get('/:todoId', controller.getTodoById);
+router.get('/:habitId', controller.getHabitById);
 
 
 
 /// ************************************************ RUTAS POST ************************************************
-// POST se usa para crear Todos nuevos.
+// POST se usa para crear Habits nuevos.
 
 
-// Crear un nuevo Todo
-router.post('/', controller.createNewTodo);
+// Crear un nuevo Habit
+router.post('/', controller.createNewHabit);
 
 
 
 /// ************************************************ RUTAS PUT ************************************************
-// PUT se usa para reemplazar completamente un Todo
+// PUT se usa para reemplazar completamente un Habit
 
 
-// Modifica un Todo
-router.put('/:todoId', controller.updateTodo);
+// Modifica un Habit
+router.put('/:habitId', controller.updateHabit);
 
 
 
 /// ************************************************ RUTAS DELETE ************************************************
-// DELETE se usa para eliminar Todo.
+// DELETE se usa para eliminar Habit.
 
 
-// Elimina un Todo
-router.delete('/:todoId', controller.deleteTodo);
+// Elimina un Habit
+router.delete('/:habitId', controller.deleteHabit);
 
 
 

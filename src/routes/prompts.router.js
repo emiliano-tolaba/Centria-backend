@@ -1,6 +1,6 @@
 import { Router } from 'express';                                   // Desestructuramos Router de express
 import * as controller from '../controllers/prompts.controller.js';   // Importamos las funciones del controlador
-import { auth } from '../middlewares/auth.middleware.js';
+import { authenticate } from '../middlewares/auth.middleware.js';
 
 
 const router = Router();                                            // Creamos una instacia de Router
@@ -29,7 +29,7 @@ router.get('/:id', controller.getPromptById);
 
 
 // Crear un nuevo Prompt
-router.post('/', auth, controller.createNewPrompt);
+router.post('/', authenticate, controller.createNewPrompt);
 
 
 
@@ -38,7 +38,7 @@ router.post('/', auth, controller.createNewPrompt);
 
 
 // Modifica un Prompt
-router.put('/:id', auth, controller.updatePrompt);
+router.put('/:id', authenticate, controller.updatePrompt);
 
 
 
@@ -47,7 +47,7 @@ router.put('/:id', auth, controller.updatePrompt);
 
 
 // Elimina un Prompt
-router.delete('/:id', auth, controller.deletePrompt);
+router.delete('/:id', authenticate, controller.deletePrompt);
 
 
 

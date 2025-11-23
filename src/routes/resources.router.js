@@ -1,6 +1,6 @@
 import { Router } from 'express';                                       // Desestructuramos Router de Express
 import * as controller from '../controllers/resources.controller.js';   // Importamos las funciones del controlador
-import { auth } from '../middlewares/auth.middleware.js';                // Importamos el middleware de autenticación para proteger algunas rutas
+import { authenticate } from '../middlewares/auth.middleware.js';                // Importamos el middleware de autenticación para proteger algunas rutas
 
 const router = Router();    // Es una instancia del Router
 
@@ -30,7 +30,7 @@ router.get('/:id', controller.getResourceById);
 // POST se usa para crear recursos nuevos.
 
 // Crear un nuevo Recurso
-router.post('/', auth, controller.createNewResource);
+router.post('/', authenticate, controller.createNewResource);
 
 
 
@@ -38,14 +38,14 @@ router.post('/', auth, controller.createNewResource);
 // PUT se usa para reemplazar completamente un Recurso
 
 // Modifica un Recurso
-router.put('/:id', auth, controller.updateResource);
+router.put('/:id', authenticate, controller.updateResource);
 
 
 /// ************************************************ RUTAS DELETE ************************************************
 // DELETE se usa para eliminar recursos.
 
 // Borrar un Recurso
-router.delete('/:id', auth, controller.deleteResource);
+router.delete('/:id', authenticate, controller.deleteResource);
 
 
 

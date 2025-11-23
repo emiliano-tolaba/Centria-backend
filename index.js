@@ -39,8 +39,9 @@ app.use(logger);
 
 app.use('/api/auth', authRouter);
 app.use('/api/resources', resourcesRouter);
-app.use('/api/users', usersRouter);
 app.use('/api/prompts', promptsRouter);
+app.use('/api/users', usersRouter);
+
 
 
 /// ************************************************ RUTA RAÍZ **************************************************************
