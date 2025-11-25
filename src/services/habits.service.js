@@ -52,7 +52,7 @@ export const validateHabitData = (data) =>
         errors.push("No se proporcionó la frecuencia del Hábito");      // Agrega un mensaje de error si el frequencia está vacia
     }
 
-    // Validación del targetCount
+    // Validación del targetCount (número)
     if (data.targetCount === undefined || data.targetCount === null)
     {
         errors.push("No se proporcionó un número objetivo para el Hábito");

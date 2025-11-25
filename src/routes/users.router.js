@@ -3,7 +3,7 @@ import * as controller from '../controllers/users.controller.js';   // Importamo
 import { authenticate } from '../middlewares/auth.middleware.js';
 import todosRouter from "./todos.router.js";
 import habitsRouter from './habits.router.js';
-
+import sessionsRouter from './sessions.router.js';
 
 const router = Router();                                            // Creamos una instacia de Router
 
@@ -59,9 +59,9 @@ router.delete('/:id', controller.deleteUser);
 
 // Subrutas de todos (tareas privadas de cada usuario)
 
-router.use('/:userId/todos', todosRouter);      // Monta el router de todos dentro de users
-router.use('/:userId/habits', habitsRouter);    // Monta el router de habits dentro de users
-
+router.use('/:userId/todos', todosRouter);          // Monta el router de todos dentro de users
+router.use('/:userId/habits', habitsRouter);        // Monta el router de habits dentro de users
+router.use('/:userId/sessions', sessionsRouter)     // Monta el router de sessions dentro de users
 
 
 export default router;
