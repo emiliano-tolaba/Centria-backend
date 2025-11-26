@@ -1,0 +1,225 @@
+{
+  "prompts": {
+    "67XoJRYWhMv0rUR0f94a": {
+      "text": "Nombrá tres cosas que te devuelven a tu centro",
+      "category": "Reconexión"
+    },
+    "8LLCh9O4SPBcaKmu6rUw": {
+      "text": "Texto modificado",
+      "category": "Journaling"
+    },
+    "OqA0nf6hB0ZJqsrlHIV5": {
+      "category": "Autoexploración",
+      "text": "¿Qué parte de ti necesita más cuidado hoy?"
+    }
+  },
+  "resources": {
+    "3VFUKKHBY2oEcqRybwgK": {
+      "type": "articulo",
+      "content": "Este es el contenido del articulo nuevo",
+      "title": "Articulo 1 modificado"
+    },
+    "4O40XP1ZvHm78oVMgFi3": {
+      "type": "articulo 4",
+      "title": "Articulo nuevo 4",
+      "content": "Este es el contenido del articulo nuevo 4"
+    },
+    "9l2s7FTDzQQPAgow3tKQ": {
+      "content": "Este es el contenido del articulo nuevo 4",
+      "title": "Articulo nuevo 4",
+      "type": "articulo 4"
+    },
+    "DUkmYKC6I9MuL4uxMOls": {
+      "title": "Técnica de respiración 4-7-8",
+      "content": "La técnica de respiración 4-7-8 es una práctica de respiración profunda y consciente que nos permite reducir el estrés, la ansiedad y promover una sensación de calma en pocos minutos. Su simplicidad y eficacia la convierten en una valiosa herramienta para recobrar el bienestar",
+      "type": "Ejercicio"
+    },
+    "INtoPbe18bGkmF6pRw2r": {
+      "title": "Ejercicio 2 modificado",
+      "content": "Este es el contenido del ejercicio nuevo",
+      "type": "Ejercicio"
+    },
+    "Q0eeZOU9Eb1mRCpq7O5i": {
+      "type": "articulo 4",
+      "title": "Articulo nuevo 4",
+      "content": "Este es el contenido del articulo nuevo 4"
+    },
+    "V2MCOpV2eCfJnMkxYM4Q": {
+      "type": "articulo",
+      "content": "Este es el contenido del articulo modificado 3",
+      "title": "Articulo modificado 3"
+    },
+    "i34vA3lJ1PqOkEDN66Mf": {
+      "title": "Articulo nuevo 4",
+      "type": "articulo 4",
+      "content": "Este es el contenido del articulo nuevo 4"
+    }
+  },
+  "users": {
+    "BjehGowlkU67t2PbSz33": {
+      "registrationDate": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1763505947,
+        "nanoseconds": 822000000
+      },
+      "password": "$2b$10$nYu1G8i0MJo/ZH2ZF7.jmuNoIuNTOSONsXhDzP/OryLnUsiwEzJje",
+      "name": "Juan",
+      "email": "Juan@outlook.com",
+      "_subcollections": {
+        "todos": {
+          "pggwEjpxyHZIhI8GkJnC": {
+            "task": "Ordenar la habitación",
+            "completedAt": null,
+            "dueDate": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1765334280,
+              "nanoseconds": 102000000
+            },
+            "isCompleted": false
+          }
+        }
+      }
+    },
+    "Jk67E9Y6eM4SEFNVyk7r": {
+      "registrationDate": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1763487757,
+        "nanoseconds": 70000000
+      },
+      "email": "emiliano@gmail.com",
+      "password": "$2b$10$hPpla1x28VXEXHtS.lRNZeTMXc9Qlm4dwbND5RVrs604FZ7PDoKSq",
+      "name": "Emiliano",
+      "_subcollections": {
+        "sessions": {
+          "7fJDS59k8xvNoG5uOUWS": {
+            "startTime": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1763845200,
+              "nanoseconds": 430000000
+            },
+            "status": "interrupted",
+            "focusTime": 50,
+            "endTime": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1763848800,
+              "nanoseconds": 463000000
+            },
+            "tag": "Estudio",
+            "breakTime": 10
+          },
+          "IywNBObVbt1NXB3iXgDs": {
+            "tag": "Meditacion",
+            "breakTime": 2,
+            "focusTime": 10,
+            "endTime": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1735701000,
+              "nanoseconds": 0
+            },
+            "startTime": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1735700400,
+              "nanoseconds": 0
+            }
+          },
+          "O14bD04PVweMHefeWC3E": {
+            "endTime": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1763674200,
+              "nanoseconds": 463000000
+            },
+            "focusTime": 100,
+            "breakTime": 20,
+            "startTime": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1763672400,
+              "nanoseconds": 430000000
+            },
+            "tag": "Ejercicio"
+          },
+          "rVQib1UsPcHVSjSPry1X": {
+            "startTime": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1763672400,
+              "nanoseconds": 430000000
+            },
+            "focusTime": 25,
+            "endTime": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1763674200,
+              "nanoseconds": 433000000
+            },
+            "breakTime": 5,
+            "tag": "Pomodoro"
+          }
+        },
+        "todos": {
+          "6ocNAMnlwUC002Qz1cDS": {
+            "task": "Leer 10 hojas",
+            "isCompleted": false,
+            "completedAt": null,
+            "dueDate": null
+          },
+          "K4Giif1eOXGCwt2Vb2kZ": {
+            "dueDate": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1763866800,
+              "nanoseconds": 388000000
+            },
+            "task": "Lavar ropa",
+            "completedAt": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1763779080,
+              "nanoseconds": 102000000
+            },
+            "isCompleted": true
+          },
+          "zqWCUvL0t661vBchXQxv": {
+            "isCompleted": true,
+            "dueDate": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1764126000,
+              "nanoseconds": 388000000
+            },
+            "completedAt": {
+              "type": "firestore/timestamp/1.0",
+              "seconds": 1761361200,
+              "nanoseconds": 388000000
+            },
+            "task": "Leer 20 hojas"
+          }
+        },
+        "habits": {
+          "8aTX6EszoXZ6njtfnjMz": {
+            "isActive": true,
+            "targetCount": 3,
+            "frequency": "weekly",
+            "name": "Meditar 15 minutos"
+          },
+          "CpW9iPrNIoY0buRztGJE": {
+            "targetCount": 10,
+            "isActive": false,
+            "name": "Practicar guitarra",
+            "frequency": "monthly"
+          },
+          "KAnZauQ1wLTpATVOMUau": {
+            "name": "Estudiar 2 horas",
+            "frequency": "weekly",
+            "targetCount": 3,
+            "isActive": true
+          }
+        }
+      }
+    },
+    "zabTkB4r1o0Fbg5BPwgo": {
+      "email": "maria@gmail.com",
+      "name": "Maria",
+      "registrationDate": {
+        "type": "firestore/timestamp/1.0",
+        "seconds": 1763430004,
+        "nanoseconds": 436000000
+      },
+      "password": "$2b$10$xjJQEWyJcbo1h/PkfXwLbu4T5lV5mS8eKWGJapBipgk789qkyc1qm"
+    }
+  }
+}

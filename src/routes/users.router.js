@@ -57,7 +57,7 @@ router.delete('/:id', controller.deleteUser);
 
 // ****************************************************************************************************************
 
-// Subrutas de todos (tareas privadas de cada usuario)
+// Subrutas de (tareas privadas de cada usuario)
 
 router.use('/:userId/todos', todosRouter);          // Monta el router de todos dentro de users
 router.use('/:userId/habits', habitsRouter);        // Monta el router de habits dentro de users
